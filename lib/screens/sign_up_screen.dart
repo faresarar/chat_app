@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
-import 'sign_up_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const Text(
-              "Login",
+              "SignUp",
               style: TextStyle(
                 fontSize: 24,
                 color: Colors.white,
@@ -50,32 +49,22 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-             const CustomButton(title: "Login",),
-            Row(
+            const CustomButton(
+              title: "SignUp",
+            ),
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "don't have an account ?",
+                Text(
+                  "already have an account ?",
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const SignUpScreen();
-                        },
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "  SignUp",
-                    style: TextStyle(
-                      color: Color(0xffC7EDE6),
-                    ),
+                Text(
+                  "  Login",
+                  style: TextStyle(
+                    color: Color(0xffC7EDE6),
                   ),
                 ),
               ],
