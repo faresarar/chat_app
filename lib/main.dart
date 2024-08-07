@@ -1,5 +1,7 @@
-import 'package:chat_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'screens/login_screen.dart';
+import 'screens/sign_up_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,12 +16,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Chat App ',
       debugShowCheckedModeBanner: false,
+      routes: {
+        'LoginScreen': (context) => const LoginScreen(),
+        'SignUpScreen': (context) => const SignUpScreen()
+      },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      initialRoute: "LoginScreen",
+
+      /// because of we are using routes we need to to replace home with initialRoute
+      //home: const LoginScreen(),
     );
   }
 }
-

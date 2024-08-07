@@ -52,16 +52,21 @@ class SignUpScreen extends StatelessWidget {
             const CustomButton(
               title: "SignUp",
             ),
-            const Row(
+             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "already have an account ?",
-                  style: TextStyle(
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushReplacementNamed(context, "LoginScreen");
+                  },
+                  child: const Text(
+                    "already have an account ?",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                Text(
+                const Text(
                   "  Login",
                   style: TextStyle(
                     color: Color(0xffC7EDE6),
