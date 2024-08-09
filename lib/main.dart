@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         'LoginScreen': (context) => const LoginScreen(),
-        'SignUpScreen': (context) =>  SignUpScreen()
+        'SignUpScreen': (context) =>  const SignUpScreen()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
