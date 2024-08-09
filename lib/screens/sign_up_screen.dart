@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -5,12 +6,13 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
-
+  const SignUpScreen({super.key, this.email, this.password});
+  final String? email;
+  final String? password;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPrimaryColor ,
+      backgroundColor: kPrimaryColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -38,26 +40,60 @@ class SignUpScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const CustomTextField(
+            CustomTextField(
+              onChanged: (email) {
+                email = email;
+              },
               hintText: "Email",
             ),
             const SizedBox(
               height: 20,
             ),
-            const CustomTextField(
+            CustomTextField(
+              onChanged: (password) {
+                password = password;
+              },
               hintText: "Password",
             ),
             const SizedBox(
               height: 10,
             ),
-            const CustomButton(
+            CustomButton(
               title: "SignUp",
+              onTap: () async {
+                try {
+                  FirebaseAuth auth = FirebaseAuth.instance;
+                  await auth.createUserWithEmailAndPassword(
+                    email: email!,
+                    password: password!,
+                  );
+                } on FirebaseAuthException catch (ex) {
+                  if (ex.code == 'weak-password') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("weak-password"),
+                      ),
+                    );
+                  } else if (ex.code == 'email-already-in-use') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("email-already-in-use"),
+                      ),
+                    );
+                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("success"),
+                    ),
+                  );
+                }
+              },
             ),
-             Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pushReplacementNamed(context, "LoginScreen");
                   },
                   child: const Text(
