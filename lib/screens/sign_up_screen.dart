@@ -62,30 +62,15 @@ class SignUpScreen extends StatelessWidget {
               title: "SignUp",
               onTap: () async {
                 try {
-                  FirebaseAuth auth = FirebaseAuth.instance;
-                  await auth.createUserWithEmailAndPassword(
-                    email: email!,
-                    password: password!,
-                  );
+                  await registerUser();
                 } on FirebaseAuthException catch (ex) {
                   if (ex.code == 'weak-password') {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("weak-password"),
-                      ),
-                    );
-                  } else if (ex.code == 'email-already-in-use') {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("email-already-in-use"),
-                      ),
-                    );
+                    showSnackBar(context,"weak-password");
                   }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("success"),
-                    ),
-                  );
+                  else if (ex.code == 'email-already-in-use') {
+                    showSnackBar(context,"email already in use");
+                  }
+                  showSnackBar(context,"success");
                 }
               },
             ),
@@ -117,6 +102,22 @@ class SignUpScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+     ScaffoldMessenger.of(context).showSnackBar(
+       SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
+  Future<void> registerUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.createUserWithEmailAndPassword(
+      email: email!,
+      password: password!,
     );
   }
 }
