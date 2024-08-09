@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../constants.dart';
+import '../helper/show_snack_bar.dart';
 import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
+import '../widgets/custom_text_form_field.dart';
 
 class SignUpScreen extends StatefulWidget {
-   const SignUpScreen({super.key, this.email, this.password ,});
-  final String? email;
-  final String? password;
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -18,8 +17,9 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   GlobalKey<FormState> formKey = GlobalKey();
 
-  bool isLoading = false ;
-
+  bool isLoading = false;
+  String? email;
+  String? password;
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -55,18 +55,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                CustomTextField(
-                  onChanged: (email) {
-                    email = email;
+                CustomTextFormField(
+                  onChanged: (data) {
+                    email = data;
                   },
                   hintText: "Email",
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                CustomTextField(
-                  onChanged: (password) {
-                    password = password;
+                CustomTextFormField(
+                  onChanged: (data) {
+                    password = data;
                   },
                   hintText: "Password",
                 ),
@@ -77,10 +77,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   title: "SignUp",
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
-                      isLoading = true ;
-                      setState(() {
-
-                      });
+                      isLoading = true;
+                      setState(() {});
                       try {
                         await registerUser();
                       } on FirebaseAuthException catch (ex) {
@@ -89,15 +87,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         } else if (ex.code == 'email-already-in-use') {
                           showSnackBar(context, "email already in use");
                         }
-                        isLoading = false ;
-                        setState(() {
-
-                        });
+                        isLoading = false;
+                        setState(() {});
                         showSnackBar(context, "success");
                       }
-                    } else {
-
-                    }
+                    } else {}
                   },
                 ),
                 Row(
@@ -133,19 +127,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
   Future<void> registerUser() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.createUserWithEmailAndPassword(
-      email: widget.email!,
-      password: widget.password!,
+      email: email!,
+      password: password!,
     );
   }
 }
