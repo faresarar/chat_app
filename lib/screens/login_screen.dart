@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       setState(() {});
                       try {
                         await loginUser();
-                        showSnackBar(context, "success");
+                        Navigator.pushReplacementNamed(context, "ChatScreen");
                       } on FirebaseAuthException catch (ex) {
                         if (ex.code == 'weak-password') {
                           showSnackBar(context, "weak-password");
@@ -84,6 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         isLoading = false;
                         setState(() {});
+                        showSnackBar(context, "success");
+
                       }
                     } else {}
                   },

@@ -81,6 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       setState(() {});
                       try {
                         await registerUser();
+                        Navigator.pushReplacementNamed(context, "ChatScreen");
                       } on FirebaseAuthException catch (ex) {
                         if (ex.code == 'weak-password') {
                           showSnackBar(context, "weak-password");

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
+import 'screens/chat_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/sign_up_screen.dart';
 
@@ -24,7 +25,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         'LoginScreen': (context) => const LoginScreen(),
-        'SignUpScreen': (context) =>  const SignUpScreen()
+        'SignUpScreen': (context) =>  const SignUpScreen(),
+        'ChatScreen': (context) =>  const ChatScreen()
+
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
