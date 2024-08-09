@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Spacer(
                   flex: 2,
                 ),
-                Image.asset("assets/images/scholar.png"),
+                Image.asset(kLogo),
                 const Text(
                   "Scholar Chat",
                   textAlign: TextAlign.center,
@@ -85,7 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         isLoading = false;
                         setState(() {});
                         showSnackBar(context, "success");
-
                       }
                     } else {}
                   },
@@ -122,9 +121,9 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   Future<void> loginUser() async {
     UserCredential user = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email!, password: password!);
   }
-
 }

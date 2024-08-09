@@ -35,7 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const Spacer(
                   flex: 2,
                 ),
-                Image.asset("assets/images/scholar.png"),
+                Image.asset(kLogo),
                 const Text(
                   "Scholar Chat",
                   textAlign: TextAlign.center,
