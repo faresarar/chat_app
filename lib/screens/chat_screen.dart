@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -24,10 +25,31 @@ class ChatScreen extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return const ChatBubble();
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return const ChatBubble();
+              },
+            ),
+          ),
+           Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              decoration: InputDecoration(
+                  hintText: "Send Message ",
+                  suffixIcon: const Icon(
+                    Icons.send,
+                    color: kPrimaryColor,
+                  ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16)
+                )
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
