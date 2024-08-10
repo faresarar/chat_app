@@ -9,21 +9,26 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: kPrimaryColor,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                kLogo,
-                height: 50,
-              ),
-              const Text("Scholar chat"),
-            ],
-          ),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
+      appBar: AppBar(
+        backgroundColor: kPrimaryColor,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              kLogo,
+              height: 50,
+            ),
+            const Text("Scholar chat"),
+          ],
         ),
-        body: const ChatBubble());
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+      body: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return const ChatBubble();
+        },
+      ),
+    );
   }
 }
