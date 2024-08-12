@@ -21,6 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    String email = ModalRoute.of(context)!.settings.arguments as String;
     return StreamBuilder<QuerySnapshot>(
       stream: messages.orderBy(kCreatedAt).snapshots(),
       builder: (context, snapshot) {
@@ -60,8 +61,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: controller,
                     onSubmitted: (data) {
-                      messages
-                          .add({kMessage: data, kCreatedAt: DateTime.now()});
+                      messages.add({
+                        kMessage: data,
+                        kCreatedAt: DateTime.now(),
+                        'id': email,
+                      });
                       controller.clear();
                       scrollController.animateTo(
                         scrollController.position.maxScrollExtent,
