@@ -1,3 +1,4 @@
+import 'package:chat_app/models/message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +17,14 @@ class _ChatScreenState extends State<ChatScreen> {
       FirebaseFirestore.instance.collection(kMessagesCollections);
 
   TextEditingController controller = TextEditingController();
+  List<MessageModel> messagesList = [];
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<QuerySnapshot>(
       future: messages.get(),
       builder: (context, snapshot) {
+        var documents = snapshot.data!.docs;
         if (snapshot.hasData) {
           return Scaffold(
             appBar: AppBar(
@@ -43,8 +46,11 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                   child: ListView.builder(
+                    itemCount: messagesList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return const ChatBubble();
+                      return ChatBubble(
+                        messageModel: messagesList[index],
+                      );
                     },
                   ),
                 ),
@@ -70,6 +76,9 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           );
         } else {
+          for (int i = 0; i < documents.length; i++) {
+            messagesList.add(MessageModel.fromJson(documents[i]));
+          }
           return const Text("Loading...");
         }
       },
