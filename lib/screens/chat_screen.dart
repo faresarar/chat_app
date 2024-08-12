@@ -21,8 +21,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
-      future: messages.get(),
+    return StreamBuilder<QuerySnapshot>(
+      stream: messages.snapshots(),
       builder: (context, snapshot) {
         var documents = snapshot.data!.docs;
         if (snapshot.hasData) {
