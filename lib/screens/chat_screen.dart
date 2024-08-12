@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import '../widgets/chat_bubble.dart';
+import '../widgets/chat_bubble_for_friend.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -50,9 +51,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     controller: scrollController,
                     itemCount: messagesList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return ChatBubble(
-                        messageModel: messagesList[index],
-                      );
+                      return messagesList[index].id == email
+                          ? ChatBubble(
+                              messageModel: messagesList[index],
+                            )
+                          : ChatBubbleForFriend(
+                              messageModel: messagesList[index]);
                     },
                   ),
                 ),
