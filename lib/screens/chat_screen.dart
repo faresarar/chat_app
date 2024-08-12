@@ -22,7 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: messages.snapshots(),
+      stream: messages.orderBy(kCreatedAt).snapshots(),
       builder: (context, snapshot) {
         var documents = snapshot.data!.docs;
         if (snapshot.hasData) {
@@ -59,7 +59,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: controller,
                     onSubmitted: (data) {
-                      messages.add({"message": data});
+                      messages.add({
+                        kMessage: data,
+                        kCreatedAt:DateTime.now()
+                      });
                       controller.clear();
                     },
                     decoration: InputDecoration(
