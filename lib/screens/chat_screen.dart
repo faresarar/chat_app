@@ -18,7 +18,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   TextEditingController controller = TextEditingController();
   List<MessageModel> messagesList = [];
-
+  final ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -46,6 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                   child: ListView.builder(
+                    controller: scrollController,
                     itemCount: messagesList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return ChatBubble(
@@ -59,11 +60,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: controller,
                     onSubmitted: (data) {
-                      messages.add({
-                        kMessage: data,
-                        kCreatedAt:DateTime.now()
-                      });
+                      messages
+                          .add({kMessage: data, kCreatedAt: DateTime.now()});
                       controller.clear();
+                      scrollController.animateTo(
+                        scrollController.position.maxScrollExtent,
+                        duration: const Duration(seconds: 10),
+                        curve: Curves.easeIn,
+                      );
                     },
                     decoration: InputDecoration(
                         hintText: "Send Message ",
