@@ -1,11 +1,21 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import '../widgets/chat_bubble.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  CollectionReference messages =
+      FirebaseFirestore.instance.collection(kMessagesCollections);
+
+  TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +44,22 @@ class ChatScreen extends StatelessWidget {
               },
             ),
           ),
-           Padding(
+          Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
+              controller: controller,
+              onSubmitted: (data) {
+                messages.add({"message": data});
+                controller.clear();
+              },
               decoration: InputDecoration(
                   hintText: "Send Message ",
                   suffixIcon: const Icon(
                     Icons.send,
                     color: kPrimaryColor,
                   ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16)
-                )
-              ),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16))),
             ),
           )
         ],
