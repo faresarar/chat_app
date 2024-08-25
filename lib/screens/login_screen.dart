@@ -62,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 20,
                 ),
                 const CustomTextFormField(
+                  obscureText: true,
                   hintText: "Password",
                 ),
                 const SizedBox(

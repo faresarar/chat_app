@@ -65,6 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 20,
                 ),
                 CustomTextFormField(
+                  obscureText: true,
                   onChanged: (data) {
                     password = data;
                   },
