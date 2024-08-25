@@ -123,8 +123,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> loginUser() async {
-    UserCredential user = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email!, password: password!);
-  }
 }
