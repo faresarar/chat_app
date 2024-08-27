@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'cubits/login_cubit.dart';
+import 'cubits/sign_up_cubit.dart';
 import 'firebase_options.dart';
 import 'screens/chat_screen.dart';
 import 'screens/login_screen.dart';
@@ -20,23 +23,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Chat App ',
-      debugShowCheckedModeBanner: false,
-      routes: {
-        'LoginScreen': (context) =>  LoginScreen(),
-        'SignUpScreen': (context) =>  const SignUpScreen(),
-        'ChatScreen': (context) =>  const ChatScreen()
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => LoginCubit()),
+        BlocProvider(create: (context) => SignUpCubit()),
 
-      },
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      ],
+      child: MaterialApp(
+        title: 'Chat App ',
+        debugShowCheckedModeBanner: false,
+        routes: {
+          'LoginScreen': (context) =>  LoginScreen(),
+          'SignUpScreen': (context) =>   SignUpScreen(),
+          'ChatScreen': (context) =>  const ChatScreen()
+
+        },
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: "LoginScreen",
+
+        /// because of we are using routes we need to to replace home with initialRoute
+        //home: const LoginScreen(),
       ),
-      initialRoute: "LoginScreen",
-
-      /// because of we are using routes we need to to replace home with initialRoute
-      //home: const LoginScreen(),
     );
   }
 }
