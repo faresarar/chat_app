@@ -1,5 +1,4 @@
 import 'package:chat_app/cubits/login_cubit.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -16,25 +15,22 @@ class LoginScreen extends StatelessWidget {
   String? password;
 
   LoginScreen({super.key});
-  Future<void> loginUser() async {
-    UserCredential user = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email!, password: password!);
-  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        if(state is LoginLoading){
-          isLoading = true ;
-        }
-        else if (state is LoginSuccess){
+        if (state is LoginLoading) {
+          isLoading = true;
+        } else if (state is LoginSuccess) {
           Navigator.pushNamed(context, "ChatScreen");
-        }
-        else if( state is LoginFailure){
-          showSnackBar(context, "Something Went Wrong");
+          isLoading = false ;
+        } else if (state is LoginFailure) {
+          showSnackBar(context, state.errorMessage);
+          isLoading = false ;
         }
       },
-      child: ModalProgressHUD(
+      builder:(context,state) =>ModalProgressHUD(
         inAsyncCall: isLoading,
         child: Scaffold(
           backgroundColor: kPrimaryColor,
@@ -84,20 +80,10 @@ class LoginScreen extends StatelessWidget {
                     title: "Login",
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        isLoading = true;
-                        try {
-                          await loginUser();
-                          Navigator.pushReplacementNamed(context, "ChatScreen",
-                              arguments: email);
-                        } on FirebaseAuthException catch (ex) {
-                          if (ex.code == 'weak-password') {
-                            showSnackBar(context, "weak-password");
-                          } else if (ex.code == 'wrong-password') {
-                            showSnackBar(context, "wrong-password");
-                          }
-                          isLoading = false;
-                          showSnackBar(context, "success");
-                        }
+                        BlocProvider.of<LoginCubit>(context).loginUser(
+                          email: email!,
+                          password: password!,
+                        );
                       } else {}
                     },
                   ),
