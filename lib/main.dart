@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Chat App ',
       debugShowCheckedModeBanner: false,
       routes: {
-        'LoginScreen': (context) => const LoginScreen(),
+        'LoginScreen': (context) =>  LoginScreen(),
         'SignUpScreen': (context) =>  const SignUpScreen(),
         'ChatScreen': (context) =>  const ChatScreen()
 
