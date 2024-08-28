@@ -1,8 +1,10 @@
 import 'package:chat_app/models/message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants.dart';
+import '../cubits/chat_cubit.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/chat_bubble_for_friend.dart';
 
@@ -20,83 +22,74 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController controller = TextEditingController();
   List<MessageModel> messagesList = [];
   final ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    String email = ModalRoute.of(context)!.settings.arguments as String;
-    return StreamBuilder<QuerySnapshot>(
-      stream: messages.orderBy(kCreatedAt,descending: true).snapshots(),
-      builder: (context, snapshot) {
-        var documents = snapshot.data!.docs;
-        if (snapshot.hasData) {
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: kPrimaryColor,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    kLogo,
-                    height: 50,
-                  ),
-                  const Text("Scholar chat"),
-                ],
-              ),
-              centerTitle: true,
-              automaticallyImplyLeading: false,
+    Object? email = ModalRoute.of(context)!.settings.arguments;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kPrimaryColor,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              kLogo,
+              height: 50,
             ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: messagesList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return messagesList[index].id == email
-                          ? ChatBubble(
-                              messageModel: messagesList[index],
-                            )
-                          : ChatBubbleForFriend(
-                              messageModel: messagesList[index]);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextField(
-                    controller: controller,
-                    onSubmitted: (data) {
-                      messages.add({
-                        kMessage: data,
-                        kCreatedAt: DateTime.now(),
-                        'id': email,
-                      });
-                      controller.clear();
-                      scrollController.animateTo(
-                        scrollController.position.maxScrollExtent,
-                        duration: const Duration(seconds: 10),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    decoration: InputDecoration(
-                        hintText: "Send Message ",
-                        suffixIcon: const Icon(
-                          Icons.send,
-                          color: kPrimaryColor,
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16))),
-                  ),
-                )
-              ],
+            const Text("Scholar chat"),
+          ],
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: BlocConsumer<ChatCubit, ChatState>(
+              builder: (context, state) {
+                if(state is  ChatSuccess ){
+                  messagesList = state.messages ;
+                }
+                return ListView.builder(
+                  controller: scrollController,
+                  itemCount: messagesList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return messagesList[index].id == email
+                        ? ChatBubble(
+                      messageModel: messagesList[index],
+                    )
+                        : ChatBubbleForFriend(
+                        messageModel: messagesList[index]);
+                  },
+                );
+              },
+              listener: (BuildContext context, ChatState state) {},
             ),
-          );
-        } else {
-          for (int i = 0; i < documents.length; i++) {
-            messagesList.add(MessageModel.fromJson(documents[i]));
-          }
-          return const Text("Loading...");
-        }
-      },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              controller: controller,
+              onSubmitted: (data) {
+                controller.clear();
+                scrollController.animateTo(
+                  scrollController.position.maxScrollExtent,
+                  duration: const Duration(seconds: 10),
+                  curve: Curves.easeIn,
+                );
+              },
+              decoration: InputDecoration(
+                  hintText: "Send Message ",
+                  suffixIcon: const Icon(
+                    Icons.send,
+                    color: kPrimaryColor,
+                  ),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16))),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
