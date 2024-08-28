@@ -24,7 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     String email = ModalRoute.of(context)!.settings.arguments as String;
     return StreamBuilder<QuerySnapshot>(
-      stream: messages.orderBy(kCreatedAt).snapshots(),
+      stream: messages.orderBy(kCreatedAt,descending: true).snapshots(),
       builder: (context, snapshot) {
         var documents = snapshot.data!.docs;
         if (snapshot.hasData) {
