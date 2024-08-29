@@ -45,25 +45,22 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: BlocConsumer<ChatCubit, ChatState>(
-              builder: (context, state) {
-                if(state is  ChatSuccess ){
-                  messagesList = state.messages ;
-                }
+            child: BlocBuilder<ChatCubit, ChatState>(
+              builder: (BuildContext context, ChatState state) {
+                List<MessageModel> messagesList = BlocProvider.of<ChatCubit>(context).messagesList;
                 return ListView.builder(
                   controller: scrollController,
                   itemCount: messagesList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return messagesList[index].id == email
                         ? ChatBubble(
-                      messageModel: messagesList[index],
-                    )
+                            messageModel: messagesList[index],
+                          )
                         : ChatBubbleForFriend(
-                        messageModel: messagesList[index]);
+                            messageModel: messagesList[index]);
                   },
                 );
               },
-              listener: (BuildContext context, ChatState state) {},
             ),
           ),
           Padding(
