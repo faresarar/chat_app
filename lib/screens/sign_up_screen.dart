@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../constants.dart';
-import '../cubits/sign_up_cubit.dart';
+import '../cubits/auth_cubit.dart';
 import '../helper/show_snack_bar.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_form_field.dart';
@@ -19,16 +19,16 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SignUpCubit, SignUpState>(
+    return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is SignUpLoading) {
           isLoading = true;
         } else if (state is SignUpSuccess) {
           Navigator.pushNamed(context, "ChatScreen");
-          isLoading = false ;
+          isLoading = false;
         } else if (state is SignUpFailure) {
           showSnackBar(context, state.errorMessage);
-          isLoading = false ;
+          isLoading = false;
         }
       },
       child: ModalProgressHUD(
@@ -87,7 +87,7 @@ class SignUpScreen extends StatelessWidget {
                     title: "SignUp",
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        BlocProvider.of<SignUpCubit>(context).registerUser(
+                        BlocProvider.of<AuthCubit>(context).registerUser(
                           email: email!,
                           password: password!,
                         );
@@ -99,8 +99,8 @@ class SignUpScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(context,
-                              "LoginScreen");
+                          Navigator.pushReplacementNamed(
+                              context, "LoginScreen");
                         },
                         child: const Text(
                           "already have an account ?",
@@ -129,4 +129,3 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 }
-
